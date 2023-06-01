@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"onlyfounds/domain"
 	"strings"
@@ -21,14 +22,14 @@ func (sc *SignupController) Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
-
 	if request.Email[strings.Index(request.Email, "@")+1:] != "vinuni.edu.vn" {
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
+		fmt.Println("!!!!")
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "must use vinuni email"})
 		return
 	}
 
 	if request.Password != request.Confirmpassword {
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Password and confirm password does not match"})
 		return
 	}
 
