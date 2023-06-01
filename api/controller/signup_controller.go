@@ -28,7 +28,7 @@ func (sc *SignupController) Signup(c *gin.Context) {
 		return
 	}
 
-	if request.Password != request.Confirmpassword {
+	if request.Password != request.ConfirmPassword {
 		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Password and confirm password does not match"})
 		return
 	}
