@@ -10,7 +10,7 @@ import (
 func Setup(timeout time.Duration, db *gorm.DB, gin *gin.Engine) {
 	publicRouter := gin.Group("")
 	NewSignupRouter(timeout, db, publicRouter)
-	// NewLoginRouter(timeout, db, publicRouter)
+	NewLoginRouter(timeout, db, publicRouter)
 	// NewRefreshTokenRouter(timeout, db, publicRouter)
 
 	// protectedRouter := gin.Group("")
