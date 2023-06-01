@@ -5,8 +5,9 @@ import (
 )
 
 type SignupRequest struct {
-	Email    string `form:"email" binding:"required,email"`
-	Password string `form:"password" binding:"required"`
+	Email           string `form:"email" binding:"required,email"`
+	Password        string `form:"password" binding:"required"`
+	Confirmpassword string `form:"confirmpassword" binding:"required"`
 }
 
 type SignupUsecase interface {

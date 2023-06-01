@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"onlyfounds/domain"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -18,7 +18,16 @@ func (sc *SignupController) Signup(c *gin.Context) {
 
 	err := c.ShouldBind(&request)
 	if err != nil {
-		fmt.Println("Signup !!!")
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	if request.Email[strings.Index(request.Email, "@")+1:] != "vinuni.edu.vn" {
+		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	if request.Password != request.Confirmpassword {
 		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
 		return
 	}
@@ -27,6 +36,7 @@ func (sc *SignupController) Signup(c *gin.Context) {
 		[]byte(request.Password),
 		bcrypt.DefaultCost,
 	)
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 		return
