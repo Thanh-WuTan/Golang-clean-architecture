@@ -2,6 +2,7 @@ package tokenutil
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"onlyfounds/domain"
@@ -9,8 +10,12 @@ import (
 	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-func CreateAccessToken(user *domain.User, secret string, expiry int) (accessToken string, err error) {
-	exp := time.Now().Add(time.Hour * time.Duration(expiry)).Unix()
+func CreateAccessToken(user *domain.User, secret string, expiry string) (accessToken string, err error) {
+	exptime, err := strconv.Atoi(expiry)
+	if err != nil {
+		return "", err
+	}
+	exp := time.Now().Add(time.Minute * time.Duration(exptime)).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.UserName,
 		"exp": exp,
@@ -22,8 +27,12 @@ func CreateAccessToken(user *domain.User, secret string, expiry int) (accessToke
 	return t, err
 }
 
-func CreateRefreshToken(user *domain.User, secret string, expiry int) (refreshToken string, err error) {
-	exp := time.Now().Add(time.Hour * time.Duration(expiry)).Unix()
+func CreateRefreshToken(user *domain.User, secret string, expiry string) (refreshToken string, err error) {
+	exptime, err := strconv.Atoi(expiry)
+	if err != nil {
+		return "", err
+	}
+	exp := time.Now().Add(time.Minute * time.Duration(exptime)).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.UserName,
 		"exp": exp,

@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"onlyfounds/domain"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -32,7 +33,22 @@ func (lc *LoginController) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"user": user.Email,
-	})
+	accessToken, err := lc.LoginUsecase.CreateAccessToken(&user, os.Getenv("ACCESS_TOKEN_SECRET"), os.Getenv("ACCESS_TOKEN_EXPIRY_MINUTE"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	refreshToken, err := lc.LoginUsecase.CreateRefreshToken(&user, os.Getenv("REFRESH_TOKEN_SECRET"), os.Getenv("REFRESH_TOKEN_EXPIRY_MINUTE"))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	loginResponse := domain.LoginResponse{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}
+
+	c.JSON(http.StatusOK, loginResponse)
 }
