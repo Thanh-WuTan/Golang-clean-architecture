@@ -50,6 +50,7 @@ func (lc *LoginController) Login(c *gin.Context) {
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}
-	c.Request.Header.Add("Authorization", accessToken)
+	c.Header("Authorization", "Bearer "+accessToken)
+	c.SetCookie("refresh_token", refreshToken, 604800, "/", "", false, true)
 	c.JSON(http.StatusOK, loginResponse)
 }
