@@ -12,4 +12,5 @@ type SignupRequest struct {
 
 type SignupUsecase interface {
 	Create(c context.Context, user *User) error
+	GetUserByEmail(c context.Context, email string) (User, error)
 }

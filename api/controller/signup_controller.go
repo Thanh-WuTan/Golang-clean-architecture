@@ -23,9 +23,16 @@ func (sc *SignupController) Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, common.ErrorResponse{Message: err.Error()})
 		return
 	}
+
 	if request.Email[strings.Index(request.Email, "@")+1:] != "vinuni.edu.vn" {
 		fmt.Println("!!!!")
 		c.JSON(http.StatusBadRequest, common.ErrorResponse{Message: "must use vinuni email"})
+		return
+	}
+
+	user, err := sc.SignupUsecase.GetUserByEmail(c, request.Email)
+	if err == nil {
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{Message: "email is already used"})
 		return
 	}
 
@@ -46,7 +53,7 @@ func (sc *SignupController) Signup(c *gin.Context) {
 
 	request.Password = string(encryptedPassword)
 
-	user := USER_MODEL.User{
+	user = USER_MODEL.User{
 		UserName: request.Email[:strings.Index(request.Email, "@")],
 		Email:    request.Email,
 		Password: request.Password,
