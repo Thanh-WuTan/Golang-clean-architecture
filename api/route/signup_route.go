@@ -7,8 +7,8 @@ import (
 	"gorm.io/gorm"
 
 	"onlyfounds/api/controller"
-	"onlyfounds/repository"
-	"onlyfounds/usecase"
+	"onlyfounds/module/user/repository"
+	"onlyfounds/module/user/usecase"
 )
 
 func NewSignupRouter(timeout time.Duration, db *gorm.DB, group *gin.RouterGroup) {

@@ -3,7 +3,8 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"onlyfounds/domain"
+	"onlyfounds/common"
+	USER_MODEL "onlyfounds/module/user/model"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -11,25 +12,25 @@ import (
 )
 
 type SignupController struct {
-	SignupUsecase domain.SignupUsecase
+	SignupUsecase USER_MODEL.SignupUsecase
 }
 
 func (sc *SignupController) Signup(c *gin.Context) {
-	var request domain.SignupRequest
+	var request USER_MODEL.SignupRequest
 
 	err := c.ShouldBind(&request)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: err.Error()})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{Message: err.Error()})
 		return
 	}
 	if request.Email[strings.Index(request.Email, "@")+1:] != "vinuni.edu.vn" {
 		fmt.Println("!!!!")
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "must use vinuni email"})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{Message: "must use vinuni email"})
 		return
 	}
 
 	if request.Password != request.ConfirmPassword {
-		c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Password and confirm password does not match"})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{Message: "Password and confirm password does not match"})
 		return
 	}
 
@@ -39,21 +40,21 @@ func (sc *SignupController) Signup(c *gin.Context) {
 	)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
+		c.JSON(http.StatusInternalServerError, common.ErrorResponse{Message: err.Error()})
 		return
 	}
 
 	request.Password = string(encryptedPassword)
 
-	user := domain.User{
-		UserName: request.Email,
+	user := USER_MODEL.User{
+		UserName: request.Email[:strings.Index(request.Email, "@")],
 		Email:    request.Email,
 		Password: request.Password,
 	}
 
 	err = sc.SignupUsecase.Create(c, &user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
+		c.JSON(http.StatusInternalServerError, common.ErrorResponse{Message: err.Error()})
 		return
 	}
 

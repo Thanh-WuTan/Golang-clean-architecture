@@ -1,11 +1,12 @@
-package domain
+package model
 
 import (
 	"context"
+	common "onlyfounds/common"
 )
 
 type User struct {
-	SQLModel
+	common.SQLModel
 	UserName string `gorm:"unique"`
 	Email    string `gorm:"unique"`
 	Password string

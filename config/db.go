@@ -7,7 +7,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"onlyfounds/domain"
+	USER_MODEL "onlyfounds/module/user/model"
 )
 
 var DB *gorm.DB
@@ -29,5 +29,5 @@ func connectDB() *gorm.DB {
 }
 
 func SyncDB() {
-	DB.AutoMigrate(&domain.User{})
+	DB.AutoMigrate(&USER_MODEL.User{})
 }

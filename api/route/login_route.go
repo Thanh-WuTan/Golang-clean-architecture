@@ -2,8 +2,8 @@ package route
 
 import (
 	"onlyfounds/api/controller"
-	"onlyfounds/repository"
-	"onlyfounds/usecase"
+	"onlyfounds/module/user/repository"
+	"onlyfounds/module/user/usecase"
 	"time"
 
 	"github.com/gin-gonic/gin"

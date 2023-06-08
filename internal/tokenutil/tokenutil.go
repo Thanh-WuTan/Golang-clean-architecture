@@ -5,12 +5,12 @@ import (
 	"strconv"
 	"time"
 
-	"onlyfounds/domain"
+	USER_MODEL "onlyfounds/module/user/model"
 
 	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-func CreateAccessToken(user *domain.User, secret string, expiry string) (accessToken string, err error) {
+func CreateAccessToken(user *USER_MODEL.User, secret string, expiry string) (accessToken string, err error) {
 	exptime, err := strconv.Atoi(expiry)
 	if err != nil {
 		return "", err
@@ -27,7 +27,7 @@ func CreateAccessToken(user *domain.User, secret string, expiry string) (accessT
 	return t, err
 }
 
-func CreateRefreshToken(user *domain.User, secret string, expiry string) (refreshToken string, err error) {
+func CreateRefreshToken(user *USER_MODEL.User, secret string, expiry string) (refreshToken string, err error) {
 	exptime, err := strconv.Atoi(expiry)
 	if err != nil {
 		return "", err
